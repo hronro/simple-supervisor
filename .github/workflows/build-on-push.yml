@@ -1,0 +1,37 @@
+name: Build Executables On Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Zig
+        run: |
+          mkdir -p $HOME/.local/bin $HOME/.local/zig
+          curl 'https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz' | tar xJ --strip-components=1 --directory=$HOME/.local/zig
+          ln -s $HOME/.local/zig/zig $HOME/.local/bin/zig
+          echo "PATH=$PATH:$HOME/.local/bin" >> $GITHUB_ENV
+
+      - name: Build binaries for different platforms
+        run: |
+          targets=('x86_64-linux' 'aarch64-linux' 'x86_64-macos' 'aarch64-macos' 'x86_64-windows' 'aarch64-windows')
+          mkdir bins
+          for target in "${targets[@]}"
+          do
+            zig build -Doptimize=ReleaseFast -Dtarget=${target}
+            mv zig-out/bin/simple-supervisor* ./
+            XZ_OPT=-e9 tar caf bins/simple-supervisor.${target}.tar.xz simple-supervisor*
+            rm simple-supervisor*
+          done
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: bins
