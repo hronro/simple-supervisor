@@ -29,7 +29,8 @@ pub const Config = struct {
 /// If the CLI arguments contains other commands (e.g. `--help`),
 /// this function will execute the command and exit.
 pub fn getConfigFromCli(allocator: std.mem.Allocator) !Config {
-    var arg_it = std.process.args();
+    var arg_it = try std.process.argsWithAllocator(allocator);
+    defer arg_it.deinit();
     // skip my own exe name
     _ = arg_it.skip();
 
