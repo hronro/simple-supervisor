@@ -81,6 +81,11 @@ pub fn getConfigFromCli(allocator: std.mem.Allocator) !Config {
             continue;
         }
 
+        if (eql(u8, arg, "-A")) {
+            config.rerun_on_exit_success = true;
+            continue;
+        }
+
         if (std.mem.startsWith(u8, arg, "-")) {
             std.debug.print("Unknown option `{s}`.\n", .{arg});
             std.process.exit(1);
