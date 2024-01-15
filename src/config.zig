@@ -8,12 +8,15 @@ const VERSION = "0.0.0";
 pub const Config = struct {
     const self = @This();
 
-    /// Maximum number of times to rerun the process.
+    /// Maximum number of times to restart the process.
     /// `0` means no limit.
-    max_reruns: usize = 0,
+    max_restarts: usize = 0,
 
-    /// If `true`, rerun the process if it exits with a zero exit code.
-    rerun_on_exit_success: bool = false,
+    /// If `true`, the process will be restarted even if it exited successfully.
+    restart_on_exit_success: bool = false,
+
+    /// If `true`, do not print messages when restarting the process.
+    silent: bool = false,
 
     /// The command to run.
     args: ArrayList([]const u8),
@@ -68,7 +71,7 @@ pub fn getConfigFromCli(allocator: std.mem.Allocator) !Config {
                     std.debug.print(" The argument of `--max` expects a number, but got `{s}`.\n", .{max_string});
                     std.process.exit(1);
                 };
-                config.max_reruns = max;
+                config.max_restarts = max;
                 continue;
             } else {
                 std.debug.print("`--max` requires a number argument.\n", .{});
@@ -77,12 +80,22 @@ pub fn getConfigFromCli(allocator: std.mem.Allocator) !Config {
         }
 
         if (eql(u8, arg, "--on-success")) {
-            config.rerun_on_exit_success = true;
+            config.restart_on_exit_success = true;
             continue;
         }
 
         if (eql(u8, arg, "-A")) {
-            config.rerun_on_exit_success = true;
+            config.restart_on_exit_success = true;
+            continue;
+        }
+
+        if (eql(u8, arg, "--silent")) {
+            config.silent = true;
+            continue;
+        }
+
+        if (eql(u8, arg, "-s")) {
+            config.silent = true;
             continue;
         }
 

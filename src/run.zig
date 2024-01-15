@@ -5,12 +5,14 @@ const Config = @import("./config.zig").Config;
 pub fn run(allocator: std.mem.Allocator, config: Config) !void {
     if (config.args.items.len > 0) {
         var exit_successfully = false;
-        var reruns: usize = 0;
+        var count_of_restarts: usize = 0;
 
         try runChildProcess(allocator, config.args.items, &exit_successfully);
 
-        while ((config.rerun_on_exit_success or !exit_successfully) and (config.max_reruns == 0 or reruns < config.max_reruns)) : (reruns += 1) {
-            std.debug.print("Process `{s}` running failed, restarting for the {d} time(s)...\n", .{ config.args.items[0], reruns + 1 });
+        while ((config.restart_on_exit_success or !exit_successfully) and (config.max_restarts == 0 or count_of_restarts < config.max_restarts)) : (count_of_restarts += 1) {
+            if (!config.silent) {
+                std.debug.print("Process `{s}` running failed, restarting for the {d} time(s)...\n", .{ config.args.items[0], count_of_restarts + 1 });
+            }
             try runChildProcess(allocator, config.args.items, &exit_successfully);
         }
     } else {
