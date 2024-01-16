@@ -17,20 +17,3 @@ pub fn main() !void {
     const config = try getConfigFromCli(arena);
     try run(arena, config);
 }
-
-fn runChildProcess(argv: []const []const u8, allocator: std.mem.Allocator, exit_successfully: *bool) !void {
-    var child_process = std.ChildProcess.init(argv, allocator);
-    const term = try child_process.spawnAndWait();
-    switch (term) {
-        .Exited => |status_code| {
-            if (status_code == 0) {
-                exit_successfully.* = true;
-            } else {
-                exit_successfully.* = false;
-            }
-        },
-        else => {
-            exit_successfully.* = false;
-        },
-    }
-}
