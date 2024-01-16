@@ -38,7 +38,7 @@ pub fn getConfigFromCli(allocator: std.mem.Allocator) !Config {
     _ = arg_it.skip();
 
     var config = Config{
-        .args = undefined,
+        .args = try std.ArrayList([]const u8).initCapacity(allocator, 8),
     };
 
     // parse options
@@ -104,7 +104,6 @@ pub fn getConfigFromCli(allocator: std.mem.Allocator) !Config {
             std.process.exit(1);
         }
 
-        config.args = try std.ArrayList([]const u8).initCapacity(allocator, 8);
         try config.args.append(arg);
         break;
     }
