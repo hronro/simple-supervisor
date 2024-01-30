@@ -3,7 +3,7 @@ const std = @import("std");
 const ArrayList = std.ArrayList;
 
 const HELP_TEXT = @embedFile("./help.txt");
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 
 pub const Config = struct {
     const self = @This();
