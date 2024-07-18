@@ -27,7 +27,7 @@ jobs:
           mkdir bins
           for target in "${targets[@]}"
           do
-            zig build -Doptimize=ReleaseFast -Dtarget=${target}
+            zig build -Doptimize=ReleaseSmall -Dtarget=${target}
             mv zig-out/bin/simple-supervisor* ./
             XZ_OPT=-e9 tar caf bins/simple-supervisor.${target}.tar.xz simple-supervisor*
             rm simple-supervisor*
