@@ -1,12 +1,17 @@
 A basic supervisor designed to automatically restart a crashed process. It can be utilized to run and restart any application.
 
 Usage:
-
 	simple-supervisor [options] <command> [args...]
 
-	Options:
+Options:
 	--max <number>,		Maximum number of restarts (Default to 0, which means unlimited)
 	--on-success, -A	Restart the process even if it exited with 0 (If not set, the supervisor will restart processes only if it exited with non-zero code)
 	--silent, -s		Don't print message when restarting
 	--help, -h		Show this help message
 	--version, -v		Show the version
+
+Example:
+	- Run the `echo` command, and restart it if it crashes:
+		$ simple-supervisor echo Hi
+	- Run the `echo` command 5 times, whenever it crashes, and do not print any message when rerunning the command:
+		$ simple-supervisor --max 5 -A -s echo Hi
