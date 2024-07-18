@@ -22,7 +22,7 @@ pub fn run(allocator: std.mem.Allocator, config: Config) !void {
 }
 
 fn runChildProcess(allocator: std.mem.Allocator, argv: []const []const u8, exit_successfully: *bool) !void {
-    var child_process = std.ChildProcess.init(argv, allocator);
+    var child_process = std.process.Child.init(argv, allocator);
     const term = try child_process.spawnAndWait();
     switch (term) {
         .Exited => |status_code| {

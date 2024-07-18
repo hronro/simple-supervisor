@@ -12,7 +12,7 @@ pub fn main() !void {
     const gpa = general_purpose_allocator.allocator();
     var arena_instance = std.heap.ArenaAllocator.init(gpa);
     defer arena_instance.deinit();
-    var arena = arena_instance.allocator();
+    const arena = arena_instance.allocator();
 
     const config = try getConfigFromCli(arena);
     try run(arena, config);
