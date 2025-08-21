@@ -2,7 +2,7 @@ const std = @import("std");
 const ss = @import("simple-supervisor");
 
 const HELP_TEXT = @embedFile("./help.txt");
-const VERSION = "0.1.3";
+const VERSION = "0.1.4";
 
 var gpa = std.heap.GeneralPurposeAllocator(.{}){};
 
