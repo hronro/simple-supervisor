@@ -14,14 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Setup Zig
-        env:
-          ZIG_VERSION: 0.15.1
-        run: |
-          mkdir -p $HOME/.local/bin $HOME/.local/zig
-          curl "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" | tar xJ --strip-components=1 --directory=$HOME/.local/zig
-          ln -s $HOME/.local/zig/zig $HOME/.local/bin/zig
-          echo "PATH=$PATH:$HOME/.local/bin" >> $GITHUB_ENV
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.15.1
 
       - name: Build binaries for different platforms
         run: |
