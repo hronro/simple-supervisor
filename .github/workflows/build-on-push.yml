@@ -9,12 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Zig
+        env:
+          ZIG_VERSION: 0.15.1
         run: |
           mkdir -p $HOME/.local/bin $HOME/.local/zig
-          curl 'https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz' | tar xJ --strip-components=1 --directory=$HOME/.local/zig
+          curl "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" | tar xJ --strip-components=1 --directory=$HOME/.local/zig
           ln -s $HOME/.local/zig/zig $HOME/.local/bin/zig
           echo "PATH=$PATH:$HOME/.local/bin" >> $GITHUB_ENV
 

@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const Config = @import("./config.zig").Config;
+pub const Config = @import("./config.zig").Config;
 
 pub fn run(allocator: std.mem.Allocator, config: Config) !void {
     if (config.args.items.len > 0) {
